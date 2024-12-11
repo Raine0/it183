@@ -1,0 +1,309 @@
+{% load tz %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'blog/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</head>
+<body>
+<div class="container">      
+    <div class="sidebar">
+        <!-- Left Sidebar -->
+        <ul class="sidebar-nav">
+            <li><a href="{% url 'blog_list' %}"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+            <li><a href="#"><i class="fas fa-users"></i> Friends</a></li>
+            <li id="dark-mode-toggle">
+                <a href="#"><i class="fas fa-moon"></i> Dark Mode</a>
+            </li>                   
+        </ul>
+      
+
+        {% if user.is_authenticated %}
+            <div class="sidebar-bottom">
+                {% if user.profile.profile_picture %}
+                    <img src="{{ user.profile.profile_picture.url }}" alt="
+    Profile Picture" class="profile-pic">
+                {% endif %}
+                <div class="user-info">
+                    <h3>{{ user.username }}</h3>
+                    <p>@{{ user.username }}</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    
+        
+    <div id="deleteConfirmationModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="close" onclick="closeModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this post?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="btn btn-danger confirm-delete">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="main-content">
+        {% if user.is_authenticated %}
+        <div class="new-post-form">
+            <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+                <div class="tweet-box">
+                    <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic"> 
+                    <textarea class="tweet-textarea" placeholder="What's happening?" name="content"></textarea>
+                </div>
+                <div class="tweet-content">
+                    <div id="image-preview"></div> 
+                </div>
+                <div class="tweet-actions">
+                    <input type="file" class="form-control-file" id="image" name="image" accept="image/*" style="display: none;">
+                    <label for="image" class="image-upload-icon">
+                      <i class="fas fa-image"></i>
+                      <span class="upload-text">Upload Image</span> 
+                    </label>
+                    <button type="submit" class="btn btn-primary tweet-button">Post</button> 
+                </div>                            
+            </form>
+        </div>
+        {% endif %}
+      
+        <!-- Centered content area -->
+        <div id="feed-container" class="feed">
+            {% for post in posts %}
+            <div class="post">
+                <div class="post-header">
+                    {% if post.author.profile.profile_picture %}
+                    <img src="{{ post.author.profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic">
+                    {% endif %}
+                    <div class="post-author">
+                        <h3>{{ post.author.username }}</h3>
+                        <p>@{{ post.author.username }}</p> 
+                    </div>
+                    <div class="post-author post-date" style="margin-left: auto;">
+                        {% timezone "Asia/Shanghai" %}  {# Set to UTC+8 timezone #}
+                        <p class="post-date">{{ post.date_posted|date:"h:i A F d, Y" }}</p>
+                        {% endtimezone %}
+                    </div>
+                </div>
+                <div class="post-content">
+                    <p>{{ post.content }}</p>
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="Post Image" class="post-image">
+                    {% endif %}
+                </div>
+                <div class="post-actions">
+                    <div style="justify-content: flex-start;">
+                        <!-- <span class="like-count" id="like-count-{{ post.id }}" style="font-size: 20px; color: #1da1f2; align-items: center;">{{ post.likes.count }}</span> -->
+                        <button class="like-button" data-post-id="{{ post.id }}" data-liked="{% if request.user in post.likes.all %}true{% else %}false{% endif %}">
+                            <i class="heart-icon {% if request.user in post.likes.all %}liked{% endif %}"></i>
+                            <span id="like-count-{{ post.id }}">{{ post.likes.count }}</span>
+                        </button>                        
+                    </div>
+                    <div style="justify-content: flex-end;">
+                    {% if post.author == user %}
+                        <a href="{% url 'edit_post' post.id %}" class="btn btn-secondary" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button type="button" class="btn btn-danger delete-post" data-post-id="{{ post.id }}" data-url="{% url 'delete_post' post.id %}" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    {% endif %}
+                 </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+    document.querySelectorAll('.like-button').forEach(button => {
+        const postId = button.dataset.postId; // Use button instead of this
+        const heartIcon = button.querySelector('.heart-icon'); // Use button instead of this
+        const isInitiallyLiked = button.dataset.liked === 'true';
+
+        // Set initial liked state
+        if (isInitiallyLiked) {
+            heartIcon.classList.add('liked');
+        } else {
+            heartIcon.classList.remove('liked');
+        }
+
+        button.addEventListener('click', function() {
+            heartIcon.classList.toggle('liked');
+            console.log('Toggled liked class:', heartIcon.classList);
+            const likeCountSpan = document.querySelector(`#like-count-${postId}`);
+
+            fetch(`/blog/like/${postId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'), // Ensure CSRF token is included
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.liked) {
+                    heartIcon.classList.add('liked'); // Add the 'liked' class
+                    button.dataset.liked = 'true'; // Update data attribute
+                } else {
+                    heartIcon.classList.remove('liked'); // Remove the 'liked' class
+                    button.dataset.liked = 'false'; // Update data attribute
+                }
+                likeCountSpan.textContent = data.like_count; // Update the like count
+            })
+            .catch(error => console.error('Error liking/unliking post:', error));
+        });
+    });
+
+
+    // Utility function to get CSRF token from cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const icon = darkModeToggle.querySelector('i');
+    const text = darkModeToggle.querySelector('span'); // Assuming a <span> for text inside the button.
+
+    // Check and apply saved preference
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (isDarkMode) {
+        applyDarkMode(icon, text);
+    }
+
+    darkModeToggle.addEventListener('click', () => {
+        const body = document.body;
+        body.classList.toggle('dark-mode');
+
+        if (body.classList.contains('dark-mode')) {
+            applyDarkMode(icon, text);
+            localStorage.setItem('darkMode', 'true'); // Save preference
+        } else {
+            removeDarkMode(icon, text);
+            localStorage.setItem('darkMode', 'false'); // Save preference
+        }
+    });
+
+    function applyDarkMode(icon, text) {
+        document.body.classList.add('dark-mode');
+        icon.classList.replace('fa-moon', 'fa-sun');
+        text.textContent = 'Light Mode';
+    }
+
+    function removeDarkMode(icon, text) {
+        document.body.classList.remove('dark-mode');
+        icon.classList.replace('fa-sun', 'fa-moon');
+        text.textContent = 'Dark Mode';
+    }
+});
+
+
+
+    const imageInput = document.getElementById('image');
+    const imagePreview = document.getElementById('image-preview');
+    const uploadLabel = document.querySelector('.image-upload-icon'); // Select the label for the upload button
+
+    imageInput.addEventListener('change', () => {
+        const file = imageInput.files[0]; // Get the first file
+        if (file) {
+            const reader = new FileReader(); // Create a new FileReader
+
+            // When the file is successfully read
+            reader.onload = (e) => {
+                const img = document.createElement('img'); // Create an image element
+                img.src = e.target.result; // Set the image source to the file data
+                img.classList.add('preview-image'); // Add a class for styling
+
+                // Clear previous previews
+                imagePreview.innerHTML = ''; 
+                // Add the image to the preview container
+                imagePreview.appendChild(img);
+
+                // Hide the upload label
+                uploadLabel.style.display = 'none';
+            };
+
+            // Read the file as a data URL
+            reader.readAsDataURL(file);
+        } else {
+            // If no file is selected, clear the preview and show the label
+            imagePreview.innerHTML = '';
+            uploadLabel.style.display = 'block';
+        }
+    });
+
+
+    $(document).ready(function() {
+    $('.delete-post').click(function() {
+        var postId = $(this).data('post-id');
+        var deleteUrl = $(this).data('url'); // Get the URL from data-url
+        $('#deleteConfirmationModal .confirm-delete').data('post-id', postId);
+        // Show the modal
+        $('#deleteConfirmationModal').show();
+    });
+
+    $('#deleteConfirmationModal .confirm-delete').click(function () {
+    var postId = $(this).data('post-id');
+
+    // Send AJAX request to delete the post
+    $.ajax({
+        url: '{% url "delete_post_ajax" %}', // Use the URL name
+        type: 'POST',
+        data: { post_id: postId, csrfmiddlewaretoken: '{{ csrf_token }}' },
+        success: function (response) {
+            if (response.success) {
+                // Reload the entire page after successful deletion
+                location.reload();
+            } else {
+                // Handle server-side errors
+                alert(response.error);
+            }
+        },
+        error: function (error) {
+            // Handle AJAX errors
+            console.error(error);
+            alert('An error occurred while deleting the post.');
+        }
+    });
+});
+
+    });
+
+    function closeModal() {
+        const modal = document.getElementById('deleteConfirmationModal');
+        modal.style.display = 'none';
+    }
+</script>
+</body>
+</html>

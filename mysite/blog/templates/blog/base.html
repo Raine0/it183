@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'blog/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+<div class="container">      
+    <div class="sidebar">
+        <!-- Left Sidebar -->
+        <ul class="sidebar-nav">
+          <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+          <li><a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+          <li><a href="#"><i class="fas fa-users"></i> Friends</a></li>
+        </ul>
+      
+
+        {% if user.is_authenticated %}
+            <div class="sidebar-bottom">
+                {% if user.profile.profile_picture %}
+                    <img src="{{ user.profile.profile_picture.url }}" alt="
+    Profile Picture" class="profile-pic">
+                {% endif %}
+                <div class="user-info">
+                    <h3>{{ user.username }}</h3>
+                    <!-- Add other user details if needed -->
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+<div class="main-content">
+  {% if user.is_authenticated %}
+  <div class="new-post-form">
+      <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+          <div class="tweet-box">
+              <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic"> 
+              <textarea class="tweet-textarea" placeholder="What's happening?" name="content"></textarea>
+          </div>
+          <div class="tweet-actions">
+            <input type="file" class="form-control-file" id="image" name="image" style="display: none;">
+            <label for="image" class="image-upload-icon"> 
+                <i class="fas fa-image"></i>
+                <span class="upload-text">Upload Image</span> 
+            </label>
+            <button type="submit" class="btn btn-primary tweet-button">Tweet</button> 
+        </div>              
+      </form>
+  </div>
+  {% endif %}
+
+  <!-- Centered content area -->
+  <div class="feed">
+      
+      {% for post in posts %}
+      <div class="post">
+          <div class="post-header">
+              {% if post.author.profile.profile_picture %}
+              <img src="{{ post.author.profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic">
+              {% endif %}
+              <div class="post-author">
+                  <h3>{{ post.author.username }}</h3>
+                  <p>@{{ post.author.username }}</p> 
+              </div>
+          </div>
+          <div class="post-content">
+              <p>{{ post.content }}</p>
+              {% if post.image %}
+              <img src="{{ post.image.url }}" alt="Post Image" class="post-image">
+              {% endif %}
+          </div>
+          <div class="post-actions">
+          </div>
+      </div>
+      {% endfor %}
+  </div>
+</div>
+<script>
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const body = document.body;
+
+    darkModeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,595 @@
+/* General styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; 
+    background-color: #fff; /* Light mode background */
+    color: #333; /* Light mode text color */
+    transition: background-color 0.3s, color 0.3s; 
+    display: flex; 
+    overflow-y: hidden;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px; /* Set a maximum width for the content */
+    margin: 0 auto;
+    overflow-y: hidden; /* Prevent vertical scrolling for the container */
+    
+}
+
+.sidebar {
+    width: 250px; /* Adjust width as needed */
+    padding: 20px;
+    background-color: #fff; /* Light mode sidebar background */
+    /* border-right: 1px solid #ddd; */
+    position: fixed;
+    top: 0;
+    height: 100vh; /* Occupy full viewport height */
+    display: flex;
+    flex-direction: column; /* Align items vertically */
+    justify-content: space-between; /* Space between nav and profile */
+    overflow-y: auto; /* Prevent vertical scrolling for the sidebar */
+    margin: none;
+}
+
+.sidebar.dark-mode {
+    background-color: #15202b; /* Dark mode sidebar background */
+    color: #e7e9ea; /* Dark mode sidebar text color */
+    border-color: #38414e;
+}
+
+.sidebar-nav {
+    list-style: none;
+    padding: none;
+    padding-inline-start: 15px;
+}
+
+.sidebar-nav li {
+    margin-bottom: 25px;
+    display: flex;        /* Enable Flexbox for list items */
+    align-items: center;  /* Vertically align items within list items */
+    list-style: none;
+}
+
+.sidebar-nav a {
+    display: flex; /* Enable Flexbox */
+    align-items: center; /* Vertically align items */
+    padding: 10px;
+    text-decoration: none;
+    color: #333; /* Default text color */
+    /* margin-right: 10px; Adjust spacing as needed */
+    /* margin-left: 20px; Add left margin - adjust value as needed */
+    font-size: 23px;
+    transition: padding 0.3s ease; /* Add smooth transition for padding */
+}
+
+.sidebar-nav a i {
+    margin-right: 40px; /* Add right margin to icon*/
+    width: 25px;
+    height: 25px;
+    top: 50%;
+    align-content: center;
+}
+
+.sidebar-nav a:hover {
+    background-color: #f5f8fa; /* Highlight on hover */
+    color: #1da1f2; /* Twitter blue on hover */
+    border-radius: 50px; /* Adjust the value as needed */
+    padding: 15px 15px; /* Increased padding on hover (right & left) */
+}
+
+.sidebar-bottom {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    /* border-top: 1px solid #ddd; Add a separator line */
+    margin-bottom: 30px;
+}
+
+.sidebar-bottom .profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.sidebar-bottom .user-info h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.user-info p {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    font-size: 16px;
+}
+
+.twitter-icon {
+    background-image: url("path/to/twitter-icon.svg"); /* Replace with your Twitter icon path */
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 30px; /* Adjust size as needed */
+    height: 30px;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.tweet-button {
+    background-color: #1da1f2; /* Twitter blue */
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-left: auto;
+}
+
+.tweet-button:hover {
+    background-color: #1a8cd8; /* Darker blue on hover */
+}
+
+.user-profile {
+    margin-top: 20px;
+}
+
+.user-profile img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.user-profile h3 {
+    margin-top: 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.user-profile p {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #666;
+}
+
+.main-content {
+    flex: 1; /* Take up remaining space */
+    margin-left: 300px; /* Offset to account for fixed sidebar width */
+    padding: 20px;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;  /* Enable vertical scrolling for the main content area */
+    height: 100vh;
+    width: calc(100% - 250px); /* Adjust based on sidebar width */
+}
+
+.feed {
+    margin-top: 35px;
+}
+
+.post {
+    background-color: #fff; /* Light mode post background */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+}
+
+/* ... (previous CSS styles) ... */
+
+.post.dark-mode {
+    background-color: #15202b; /* Dark mode post background */
+    color: #e7e9ea; /* Dark mode post text color */
+    border-color: #38414e;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.post-author h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.post-author p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.post-content {
+    margin-bottom: 10px;
+}
+
+.post-image {
+    display: block;
+    min-width: 300px;
+    min-height: 400px;
+    border-radius: 5px;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.post-actions button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #666;
+}
+
+.post-actions button:hover {
+    color: #1da1f2; /* Twitter blue on hover */
+}
+
+.right-sidebar {
+    width: 250px; /* Adjust width as needed */
+    padding: 20px;
+    background-color: #fff; /* Light mode sidebar background */
+    border-left: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+}
+
+.right-sidebar.dark-mode {
+    background-color: #15202b; /* Dark mode sidebar background */
+    color: #e7e9ea; /* Dark mode sidebar text color */
+    border-color: #38414e;
+}
+
+.sidebar, .main-content, .right-sidebar {
+    overflow-y: auto; /* allows scroll without visible scrollbars */
+    scrollbar-width: none; /* hides scrollbar in Firefox */
+}
+
+/* For WebKit-based browsers */
+.sidebar::-webkit-scrollbar, .main-content::-webkit-scrollbar, .right-sidebar::-webkit-scrollbar {
+    display: none; /* hides scrollbar in WebKit */
+}
+
+.new-post-form {
+    border: 1px solid #ddd; /* Light gray border */
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+}
+
+.tweet-box {
+    display: flex;
+    align-items: flex-start; /* Align items to the top */
+
+}
+
+.tweet-box .profile-pic {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.tweet-textarea {
+    width: calc(100% - 68px); /* Adjust width to account for profile pic and margin */
+    padding: 10px;
+    border: none; /* Remove default border */
+    resize: none; /* Prevent resizing */
+    font-size: 16px;
+    line-height: 1.5;
+    border: 1px solid #ddd; /* Light gray border */
+    border-radius: 15px;
+}
+
+.tweet-textarea:focus {
+    outline: none; /* Remove outline on focus */
+}
+
+.tweet-actions {
+    display: flex;
+    justify-content: flex-end; /* Space items evenly */
+    align-items: center;
+    margin-top: 10px;
+}
+
+.tweet-actions .form-control-file {
+    width: auto; /* Adjust width as needed */
+}
+
+.tweet-actions .tweet-button {
+    background-color: #1da1f2; /* Twitter blue */
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tweet-button {
+    margin: 0px;
+}
+
+.image-upload-icon {
+    cursor: pointer; /* Make it look clickable */
+    font-size: 20px; /* Adjust icon size as needed */
+    color: #1da1f2; /* Twitter blue color */
+    margin-right: 10px;
+    margin-left: 60px;
+    display: inline-flex; /* Allow elements to be arranged horizontally */
+    align-items: center; /* Vertically align icon and text */
+}
+
+.upload-text {
+    margin-left: 5px; /* Add spacing between icon and text */
+    font-size: 14px; /* Adjust font size as needed */
+    color: #1da1f2; /* Twitter blue color */
+}
+
+.image-upload-icon:hover {
+    color: #1a8cd8; /* Darker blue on hover */
+}
+
+#image-preview {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: auto; /* Adjust as needed */
+    margin-top: 10px; /* Optional spacing above */
+}
+
+.preview-image {
+    max-width: 100%; /* Prevent image overflow */
+    max-height: 200px; /* Limit the height for large images */
+    border-radius: 10px; /* Optional styling for rounded corners */
+}
+
+.post-date {
+    font-size: 12px;
+    color: #8899a6; /* Example: light gray */
+}
+
+/* General Dark Mode Styles */
+body.dark-mode {
+    background-color: #15202b; /* Twitter dark background */
+    color: #e7e9ea; /* Twitter light text */
+    transition: background-color 0.3s, color 0.3s;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+body.dark-mode .post {
+    background-color: #15202b;
+    color: #e7e9ea;
+    border-color: #38414e;
+}
+
+body.dark-mode .new-post-form {
+    background-color: #15202b;
+    color: #e7e9ea;
+    border-color: #838a8f;
+}
+
+body.dark-mode .new-post-form .tweet-box{
+    background-color: #15202b;
+    color: #e7e9ea;
+    border-color: #838a8f;
+}
+
+/* Sidebar styling */
+body.dark-mode .sidebar {
+    background-color: #15202b; /* Dark mode background */
+    color: #e7e9ea; /* Text color */
+    /* border-right: 1px solid #2f3336; Twitter-style gray border */
+}
+
+body.dark-mode .sidebar-nav a{
+    color: #e7e9ea; /* Text color */
+}
+
+body.dark-mode .sidebar-nav a:hover {
+    background-color: #ffffff42; /* Highlight on hover */
+    color: #1a8cd8;
+    border-radius: 50px; /* Adjust the value as needed */
+    padding: 15px 15px; /* Increased padding on hover (right & left) */
+}
+
+/* Main content styling */
+body.dark-mode .main-content {
+    background-color: #15202b; /* Background color */
+    /* color: #e7e9ea; Text color */
+    border: 1px solid #838a8f;
+    border-bottom: 0px;
+    border-top: 0px;
+    flex: 1; /* Take up remaining space */
+    margin-left: 300px; /* Offset to account for fixed sidebar width */
+    padding: 20px;
+    overflow-y: auto;  /* Enable vertical scrolling for the main content area */
+    height: 100vh;
+    width: calc(100% - 250px); /* Adjust based on sidebar width */
+}
+
+/* Post styling */
+body.dark-mode .post {
+    background-color: #15202b; /* Background color */
+    color: #e7e9ea; /* Text color */
+    border: 1px solid #838a8f; /* Gray border similar to Twitter */
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+}
+
+/* Form fields or input styling */
+body.dark-mode input,
+body.dark-mode textarea {
+    background-color: #15202b;
+    color: #e7e9ea;
+    border: 1px solid #838a8f;
+}
+
+/* Buttons */
+body.dark-mode button {
+    /* background-color: #192734; */
+    color: #e7e9ea;
+    /* border: 1px solid #2f3336; */
+}
+
+/* Buttons */
+body.dark-mode .btn-secondary {
+    color: #e7e9ea;
+}
+
+body.dark-mode .btn-secondary:hover {
+    color: #1da1f2;
+}
+
+/* Modal Background */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal Dialog */
+.modal-dialog {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Modal Content */
+.modal-content {
+    padding: 20px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}
+
+.modal-body {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-secondary {
+    /* background-color: #e0e0e0; */
+    color: #333;
+}
+
+.btn-secondary:hover {
+    color: #1da1f2;
+}
+
+.btn-danger {
+    background-color: #ff5a5f;
+    color: #333;
+}
+
+textarea {
+    width: calc(100% - 68px); 
+    padding: 10px;
+    border: none; 
+    resize: none; 
+    font-size: 16px;
+    line-height: 1.5;
+    border: 1px solid #ddd; 
+    border-radius: 15px;
+}
+
+/* Focus State */
+textarea:focus {
+    outline: none;
+    border-color: #1da1f2;
+}
+
+.like-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+    color: gray;
+}
+
+.heart-icon {
+    font-size: 23px;
+    color: gray;
+    font-style: normal; /* Prevent italic */
+}
+
+.heart-icon.liked {
+    color: red; /* Red for liked state */
+    font-size: 23px;
+    content: '\2764';
+}
+
+.heart-icon:before {
+    content: '\2661'; /* Hollow heart */
+}
+
+.heart-icon.liked:before {
+    content: '\2764';
+}
+
+
+
